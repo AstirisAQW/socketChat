@@ -9,22 +9,29 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+let users = {}; // Track connected users by socket ID
+
 io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    // Broadcast to all clients that a user has connected
-    io.emit('user activity', 'A user connected');
-
-    // Handle chat message event
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-        io.emit('chat message', msg); // Broadcast message to all clients
+    // Listen for the 'set nickname' event
+    socket.on('set nickname', (nickname) => {
+        users[socket.id] = nickname; // Store the user's nickname
+        console.log(`${nickname} connected`);
+        io.emit('user activity', `${nickname} has joined the chat`); // Notify others
     });
 
-    // Handle user disconnection
+    // Handle chat messages
+    socket.on('chat message', (msg) => {
+        const nickname = users[socket.id] || 'Anonymous';
+        console.log(`${nickname}: ${msg}`);
+        io.emit('chat message', `${nickname}: ${msg}`); // Prepend nickname to the message
+    });
+
+    // Handle disconnection
     socket.on('disconnect', () => {
-        console.log('user disconnected');
-        io.emit('user activity', 'A user disconnected'); // Notify all clients
+        const nickname = users[socket.id] || 'A user';
+        console.log(`${nickname} disconnected`);
+        io.emit('user activity', `${nickname} has left the chat`); // Notify others
+        delete users[socket.id]; // Remove user from tracking
     });
 });
 
