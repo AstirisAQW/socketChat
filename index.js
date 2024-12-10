@@ -12,20 +12,19 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('a user connected');
 
+    // Broadcast to all clients that a user has connected
+    io.emit('user activity', 'A user connected');
+
+    // Handle chat message event
+    socket.on('chat message', (msg) => {
+        console.log('message: ' + msg);
+        io.emit('chat message', msg); // Broadcast message to all clients
+    });
+
+    // Handle user disconnection
     socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-});
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      console.log('message: ' + msg);
-    });
-});
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
+        console.log('user disconnected');
+        io.emit('user activity', 'A user disconnected'); // Notify all clients
     });
 });
 

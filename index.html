@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Socket.IO Chat</title>
     <style>
       body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
@@ -13,21 +13,23 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+      .notification { color: gray; font-style: italic; }
     </style>
   </head>
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" placeholder="Type your message here..." /><button>Send</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
-    
       var form = document.getElementById('form');
       var input = document.getElementById('input');
-    
+      var messages = document.getElementById('messages');
+
+      // Send a chat message
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
@@ -36,6 +38,7 @@
         }
       });
 
+      // Listen for incoming chat messages
       socket.on('chat message', function(msg) {
         var item = document.createElement('li');
         item.textContent = msg;
@@ -43,9 +46,14 @@
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      
+      // Listen for user activity (connect/disconnect)
+      socket.on('user activity', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        item.classList.add('notification'); // Add notification styling
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
     </script>
-
-
   </body>
 </html>
