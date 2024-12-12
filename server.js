@@ -28,6 +28,17 @@ io.on('connection', (socket) => {
         io.emit('chat message', `${nickname}: ${msg}`); // Prepend nickname to the message
     });
 
+    // Handle typing events
+    socket.on('typing', () => {
+        const nickname = users[socket.id] || 'Anonymous';
+        socket.broadcast.emit('typing', nickname); // Notify others that this user is typing
+    });
+
+    // Handle stop typing events
+    socket.on('stop typing', () => {
+        socket.broadcast.emit('stop typing'); // Notify others that the user has stopped typing
+    });
+
     // Handle disconnection
     socket.on('disconnect', () => {
         const nickname = users[socket.id] || 'A user';
