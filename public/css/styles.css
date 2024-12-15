@@ -76,6 +76,22 @@ body {
     text-align: left; /* Align timestamp to the left for other messages */
 }
 
+#message-list > li .username {
+    font-weight: bold;
+    font-size: 0.9rem; /* Slightly smaller than message text */
+    margin-bottom: 0.2rem; /* Space between username and message bubble */
+    text-align: center; /* Center the username above the bubble */
+}
+
+#message-list > li.self .username {
+    color: #007bff; /* Blue color for self username */
+}
+
+#message-list > li.other .username {
+    color: #343a40; /* Dark color for others' usernames */
+}
+
+
 #user-list {
     overflow-y: auto;
     flex-grow: 1;

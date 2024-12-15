@@ -13,9 +13,6 @@ app.get('/', (req, res) => {
 
 let users = {}; // Track users by socket ID
 
-// Function to get a timestamp
-const getTimeStamp = () => new Date().toLocaleTimeString();
-
 io.on('connection', (socket) => {
     // Handle nickname setting
     socket.on('set nickname', (nickname) => {
