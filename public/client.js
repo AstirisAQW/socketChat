@@ -79,8 +79,8 @@ function initializeSocket() {
 
     // Handle "Exit" button click to disconnect the user
     exitButton.addEventListener('click', () => {
-        socket.emit('disconnect');  // Disconnect from the server
-        location.reload();  // Reload the page
+        socket.disconnect();  // Properly disconnect the socket
+        location.reload();  // Reload the page to reset the UI
     });
 }
 

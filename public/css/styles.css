@@ -30,7 +30,7 @@ body {
     flex-grow: 1;
     overflow-y: auto; /* Allows scrolling of the messages */
     padding: 10px;
-    height: calc(100vh - 80px); /* Adjust height so that the form doesn't move */
+    height: 100%; /* Adjust height so that the form doesn't move */
 }
 
 #message-list > li {
