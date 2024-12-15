@@ -1,29 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Socket.IO Chat with Nicknames</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Chat App</title>
 
-    <!-- Link to external styles.css file -->
-    <link rel="stylesheet" href="css/styles.css">
+      <!-- Bootstrap CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+      <!-- Custom CSS -->
+      <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form id="form" action="" style="display: none;"> <!-- Initially hidden -->
-      <input id="input" autocomplete="off" placeholder="Type your message here..." /><button>Send</button>
-    </form>
+      <div class="container-fluid vh-100">
+          <div class="row h-100">
+              <!-- Sidebar -->
+              <div class="col-md-2 bg-light border-end d-flex flex-column" id="sidebar">
+                  <h4 class="p-3 border-bottom text-center">Users</h4>
+                  <ul class="list-group list-group-flush flex-grow-1" id="user-list">
+                      <li class="list-group-item text-center text-muted">No users online</li>
+                  </ul>
 
-    <!-- Prompt for nickname -->
-    <div id="nickname-container">
-      <h2>Enter Your Nickname</h2>
-      <input id="nickname" placeholder="Your Name..." />
-      <button id="set-nickname">Join Chat</button>
-    </div>
+              </div>
 
-    <!-- Typing notification -->
-    <div id="typing-notification"></div>
+              <!-- Chat Container -->
+              <div class="col-md-10 d-flex flex-column">
+                  <!-- Messages -->
+                  <div class="bg-white flex-grow-1 overflow-auto" id="messages">
+                      <ul class="list-unstyled p-3" id="message-list"></ul>
+                  </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="client.js"></script> <!-- Include the external client.js -->
+                  <!-- Chat Form -->
+                  <form id="form" class="p-3 border-top d-flex">
+                      <input id="input" type="text" class="form-control me-2" placeholder="Type your message..." autocomplete="off">
+                      <button type="submit" class="btn btn-primary">Send</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+      <!-- Socket.IO and Custom JavaScript -->
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="client.js"></script>
   </body>
 </html>

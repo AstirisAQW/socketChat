@@ -11,44 +11,37 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-let users = {}; // Track connected users by socket ID
+let users = {}; // Track users by socket ID
 
 io.on('connection', (socket) => {
-    // Listen for the 'set nickname' event
+    // Handle nickname setting
     socket.on('set nickname', (nickname) => {
-        users[socket.id] = nickname; // Store the user's nickname
-        console.log(`${nickname} connected`);
-        io.emit('user activity', `${nickname} has joined the chat`); // Notify others
+        users[socket.id] = nickname;
+        io.emit('user activity', `${nickname} joined the chat`);
+        updateUserList();
     });
 
-    // Handle chat messages
+    // Handle chat messages (no timestamp)
     socket.on('chat message', (msg) => {
         const nickname = users[socket.id] || 'Anonymous';
-        console.log(`${nickname}: ${msg}`);
-        io.emit('chat message', `${nickname}: ${msg}`); // Prepend nickname to the message
+        io.to(socket.id).emit('chat message', { msg: `${msg}`, isSelf: true });
+        socket.broadcast.emit('chat message', { msg: `${nickname}: ${msg}`, isSelf: false });
     });
 
-    // Handle typing events
-    socket.on('typing', () => {
-        const nickname = users[socket.id] || 'Anonymous';
-        socket.broadcast.emit('typing', nickname); // Notify others that this user is typing
-    });
-
-    // Handle stop typing events
-    socket.on('stop typing', () => {
-        socket.broadcast.emit('stop typing'); // Notify others that the user has stopped typing
-    });
-
-    // Handle disconnection
+    // Handle disconnects
     socket.on('disconnect', () => {
         const nickname = users[socket.id] || 'A user';
-        console.log(`${nickname} disconnected`);
-        io.emit('user activity', `${nickname} has left the chat`); // Notify others
-        delete users[socket.id]; // Remove user from tracking
+        io.emit('user activity', `${nickname} left the chat`);
+        delete users[socket.id];
+        updateUserList();
     });
+
+    // Update user list
+    function updateUserList() {
+        io.emit('update users', Object.values(users));
+    }
 });
 
 server.listen(3000, () => {
-    console.log('listening on *:3000');
-    console.log('http://localhost:3000');
+    console.log('Server running at http://localhost:3000');
 });
