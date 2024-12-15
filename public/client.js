@@ -9,11 +9,30 @@ let username;
 
 // Prompt for username on page load
 window.onload = () => {
-    username = prompt("Enter your nickname:");
-    if (!username) {
-        username = "Anonymous";
-    }
-    initializeSocket();
+    const nicknameModal = document.getElementById('nickname-modal');
+    const nicknameInput = document.getElementById('nickname-input');
+    const nicknameSubmit = document.getElementById('nickname-submit');
+
+    // Show modal
+    nicknameModal.style.visibility = 'visible';
+    nicknameModal.style.opacity = '1';
+
+    // Handle submitting nickname
+    nicknameSubmit.addEventListener('click', () => {
+        username = nicknameInput.value.trim() || "Anonymous";  // Fallback to "Anonymous" if empty
+        if (username) {
+            nicknameModal.style.visibility = 'hidden';  // Hide modal
+            nicknameModal.style.opacity = '0';
+            initializeSocket();  // Initialize the socket connection
+        }
+    });
+
+    // Close the modal if user presses "Enter"
+    nicknameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            nicknameSubmit.click();
+        }
+    });
 };
 
 // Initialize socket connection
@@ -54,6 +73,28 @@ function initializeSocket() {
         
         // Auto-scroll to the latest message
         messageList.scrollTop = messageList.scrollHeight;
+    });
+
+    input.addEventListener('input', () => {
+        socket.emit('typing', username);
+    });
+    
+    // Handle typing notifications
+    socket.on('typing', (nickname) => {
+        let typingIndicator = document.getElementById('typing-indicator');
+        if (!typingIndicator) {
+            typingIndicator = document.createElement('li');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.classList.add('text-muted', 'fst-italic');
+            messageList.appendChild(typingIndicator);
+        }
+        typingIndicator.textContent = `${nickname} is typing...`;
+    
+        // Remove the typing indicator after 3 seconds if the user stops typing
+        clearTimeout(typingIndicator.timeout);
+        typingIndicator.timeout = setTimeout(() => {
+            typingIndicator.remove();
+        }, 3000);
     });
     
 
