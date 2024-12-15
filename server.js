@@ -25,19 +25,16 @@ io.on('connection', (socket) => {
     });
 
     // Handle chat messages with timestamps
-    io.on('connection', (socket) => {
-        socket.on('chat message', (msg) => {
-            const nickname = users[socket.id] || 'Anonymous';
-            const timestamp = Date.now(); // Get the timestamp in milliseconds
-            
-            // Emit the message with timestamp to the sender
-            io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
-            
-            // Broadcast the message with timestamp to others
-            socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
-        });
+    socket.on('chat message', (msg) => {
+        const nickname = users[socket.id] || 'Anonymous';
+        const timestamp = Date.now(); // Get the timestamp in milliseconds
+        
+        // Emit the message with timestamp to the sender
+        io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
+        
+        // Broadcast the message with timestamp to others
+        socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
     });
-    
 
     // Handle disconnects
     socket.on('disconnect', () => {
@@ -52,7 +49,6 @@ io.on('connection', (socket) => {
         io.emit('update users', Object.values(users));
     }
 });
-
 
 server.listen(3000, () => {
     console.log('Server running at http://localhost:3000');

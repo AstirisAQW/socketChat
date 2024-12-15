@@ -49,10 +49,6 @@ function initializeSocket() {
         // Auto-scroll to the latest message
         messageList.scrollTop = messageList.scrollHeight;
     });
-    
-    
-    
-    
 
     // Handle user activity (joined/left notifications)
     socket.on('user activity', (msg) => {
