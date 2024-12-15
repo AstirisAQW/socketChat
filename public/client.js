@@ -9,11 +9,30 @@ let username;
 
 // Prompt for username on page load
 window.onload = () => {
-    username = prompt("Enter your nickname:");
-    if (!username) {
-        username = "Anonymous";
-    }
-    initializeSocket();
+    const nicknameModal = document.getElementById('nickname-modal');
+    const nicknameInput = document.getElementById('nickname-input');
+    const nicknameSubmit = document.getElementById('nickname-submit');
+
+    // Show modal
+    nicknameModal.style.visibility = 'visible';
+    nicknameModal.style.opacity = '1';
+
+    // Handle submitting nickname
+    nicknameSubmit.addEventListener('click', () => {
+        username = nicknameInput.value.trim() || "Anonymous";  // Fallback to "Anonymous" if empty
+        if (username) {
+            nicknameModal.style.visibility = 'hidden';  // Hide modal
+            nicknameModal.style.opacity = '0';
+            initializeSocket();  // Initialize the socket connection
+        }
+    });
+
+    // Close the modal if user presses "Enter"
+    nicknameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            nicknameSubmit.click();
+        }
+    });
 };
 
 // Initialize socket connection
