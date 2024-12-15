@@ -33,6 +33,11 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
     });
 
+    socket.on('typing', (nickname) => {
+        // Broadcast to all users that someone is typing
+        socket.broadcast.emit('typing', nickname);
+    });
+
     // Handle disconnects
     socket.on('disconnect', () => {
         const nickname = users[socket.id] || 'A user';

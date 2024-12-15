@@ -55,6 +55,28 @@ function initializeSocket() {
         // Auto-scroll to the latest message
         messageList.scrollTop = messageList.scrollHeight;
     });
+
+    input.addEventListener('input', () => {
+        socket.emit('typing', username);
+    });
+    
+    // Handle typing notifications
+    socket.on('typing', (nickname) => {
+        let typingIndicator = document.getElementById('typing-indicator');
+        if (!typingIndicator) {
+            typingIndicator = document.createElement('li');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.classList.add('text-muted', 'fst-italic');
+            messageList.appendChild(typingIndicator);
+        }
+        typingIndicator.textContent = `${nickname} is typing...`;
+    
+        // Remove the typing indicator after 3 seconds if the user stops typing
+        clearTimeout(typingIndicator.timeout);
+        typingIndicator.timeout = setTimeout(() => {
+            typingIndicator.remove();
+        }, 3000);
+    });
     
 
     // Handle user activity (joined/left notifications)

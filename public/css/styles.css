@@ -113,6 +113,12 @@ body {
     color: #343a40; /* Dark color for others' usernames */
 }
 
+#typing-indicator {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: gray;
+}
+
 
 #user-list {
     overflow-y: auto;
