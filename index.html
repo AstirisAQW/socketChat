@@ -12,15 +12,19 @@
       <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
+      <!-- Header -->
+      <header>
+          <h1>SocketChat</h1>
+      </header>
+
       <div class="container-fluid vh-100">
           <div class="row h-100">
               <!-- Sidebar -->
               <div class="col-md-2 bg-light border-end d-flex flex-column" id="sidebar">
-                  <h4 class="p-3 border-bottom text-center">Users</h4>
+                  <h4 class="p-3 border-bottom text-center">Online Users</h4>
                   <ul class="list-group list-group-flush flex-grow-1" id="user-list">
                       <li class="list-group-item text-center text-muted">No users online</li>
                   </ul>
-
               </div>
 
               <!-- Chat Container -->
@@ -33,7 +37,7 @@
                   <!-- Chat Form -->
                   <form id="form" class="p-3 border-top d-flex">
                       <input id="input" type="text" class="form-control me-2" placeholder="Type your message..." autocomplete="off">
-                      <button type="submit" class="btn btn-primary">Send</button>
+                      <button type="submit" class="btn btn-primary btn-primary:hover">Send</button>
                   </form>
               </div>
           </div>

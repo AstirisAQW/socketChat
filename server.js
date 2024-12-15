@@ -21,11 +21,16 @@ io.on('connection', (socket) => {
         updateUserList();
     });
 
-    // Handle chat messages (no timestamp)
+    // Handle chat messages with timestamps
     socket.on('chat message', (msg) => {
         const nickname = users[socket.id] || 'Anonymous';
-        io.to(socket.id).emit('chat message', { msg: `${msg}`, isSelf: true });
-        socket.broadcast.emit('chat message', { msg: `${nickname}: ${msg}`, isSelf: false });
+        const timestamp = Date.now(); // Get the timestamp in milliseconds
+        
+        // Emit the message with timestamp to the sender
+        io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
+        
+        // Broadcast the message with timestamp to others
+        socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
     });
 
     // Handle disconnects

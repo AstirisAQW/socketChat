@@ -24,13 +24,38 @@ function initializeSocket() {
     socket.emit('set nickname', username);
 
     // Handle receiving chat messages (no timestamp)
-    socket.on('chat message', ({ msg, isSelf }) => {
+    socket.on('chat message', ({ msg, nickname, timestamp, isSelf }) => {
         const li = document.createElement('li');
-        li.textContent = msg;
-        li.classList.add(isSelf ? 'self' : 'other');
+        li.classList.add(isSelf ? 'self' : 'other'); // Apply bubble-specific class to the list item
+        
+        // Create the username element
+        const usernameElement = document.createElement('div');
+        usernameElement.textContent = nickname;
+        usernameElement.classList.add('username');  // Apply class for styling the username
+        
+        // Create the chat bubble for the message
+        const messageBubble = document.createElement('div');
+        messageBubble.textContent = isSelf ? msg : `${msg}`;
+        messageBubble.classList.add('chat-bubble'); // Style for the chat bubble
+        
+        // Create the timestamp element
+        const timeElement = document.createElement('div');
+        const timeString = new Date(timestamp).toLocaleTimeString(); // Convert milliseconds to readable time
+        timeElement.textContent = timeString;
+        timeElement.classList.add('timestamp'); // Style for the timestamp
+        
+        // Append username, message bubble, and timestamp to the list item
+        li.appendChild(usernameElement);  // Append the username
+        li.appendChild(messageBubble);  // Append the chat bubble
+        li.appendChild(timeElement);  // Append the timestamp
+        
+        // Append the list item to the message list
         messageList.appendChild(li);
+        
+        // Auto-scroll to the latest message
         messageList.scrollTop = messageList.scrollHeight;
     });
+    
 
     // Handle user activity (joined/left notifications)
     socket.on('user activity', (msg) => {
@@ -54,8 +79,8 @@ function initializeSocket() {
 
     // Handle "Exit" button click to disconnect the user
     exitButton.addEventListener('click', () => {
-        socket.emit('disconnect');  // Disconnect from the server
-        location.reload();  // Reload the page
+        socket.disconnect();  // Properly disconnect the socket
+        location.reload();  // Reload the page to reset the UI
     });
 }
 
