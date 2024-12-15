@@ -13,6 +13,9 @@ app.get('/', (req, res) => {
 
 let users = {}; // Track users by socket ID
 
+// Function to get a timestamp
+const getTimeStamp = () => new Date().toLocaleTimeString();
+
 io.on('connection', (socket) => {
     // Handle nickname setting
     socket.on('set nickname', (nickname) => {
@@ -21,12 +24,20 @@ io.on('connection', (socket) => {
         updateUserList();
     });
 
-    // Handle chat messages (no timestamp)
-    socket.on('chat message', (msg) => {
-        const nickname = users[socket.id] || 'Anonymous';
-        io.to(socket.id).emit('chat message', { msg: `${msg}`, isSelf: true });
-        socket.broadcast.emit('chat message', { msg: `${nickname}: ${msg}`, isSelf: false });
+    // Handle chat messages with timestamps
+    io.on('connection', (socket) => {
+        socket.on('chat message', (msg) => {
+            const nickname = users[socket.id] || 'Anonymous';
+            const timestamp = Date.now(); // Get the timestamp in milliseconds
+            
+            // Emit the message with timestamp to the sender
+            io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
+            
+            // Broadcast the message with timestamp to others
+            socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
+        });
     });
+    
 
     // Handle disconnects
     socket.on('disconnect', () => {
@@ -41,6 +52,7 @@ io.on('connection', (socket) => {
         io.emit('update users', Object.values(users));
     }
 });
+
 
 server.listen(3000, () => {
     console.log('Server running at http://localhost:3000');

@@ -33,33 +33,47 @@ body {
     height: calc(100vh - 80px); /* Adjust height so that the form doesn't move */
 }
 
-#message-list {
+#message-list > li {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0;
-    margin: 0;
-}
-
-#message-list > li {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    max-width: 50%; /* Limit the width of the message bubble */
-    word-wrap: break-word; /* Break text if it exceeds the width */
+    align-items: flex-start; /* Default alignment for incoming messages */
+    gap: 0.2rem; /* Space between bubble and timestamp */
     margin-bottom: 0.5rem;
 }
 
 #message-list > li.self {
-    background-color: #d1e7dd;
-    align-self: flex-end;
-    text-align: right;
+    align-items: flex-end; /* Align sent messages to the right */
 }
 
-#message-list > li.other {
-    background-color: #f8d7da;
-    align-self: flex-start;
-    text-align: left;
+#message-list > li .chat-bubble {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    max-width: 50%; /* Limit bubble width */
+    word-wrap: break-word; /* Ensure text breaks properly */
+}
+
+#message-list > li.self .chat-bubble {
+    background-color: #d1e7dd; /* Light green for self messages */
+    text-align: right; /* Align text inside the bubble */
+}
+
+#message-list > li.other .chat-bubble {
+    background-color: #f8d7da; /* Light red for other users */
+    text-align: left; /* Align text inside the bubble */
+}
+
+/* Timestamp styling */
+#message-list > li .timestamp {
+    font-size: 0.8rem; /* Smaller font size for timestamp */
+    color: gray; /* Gray color for timestamp text */
+}
+
+#message-list > li.self .timestamp {
+    text-align: right; /* Align timestamp to the right for self messages */
+}
+
+#message-list > li.other .timestamp {
+    text-align: left; /* Align timestamp to the left for other messages */
 }
 
 #user-list {
