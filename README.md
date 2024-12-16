@@ -27,8 +27,8 @@ This project is a real-time chat application built using Node.js, Express, and S
 **Setting Up the Server**
 1. Clone the repository (or copy the files if you already have them).
 ```
-  git clone https://your-repository-url.git
-  cd your-repository-folder
+  git clone https://github.com/AstirisAQW/socketChat.git
+  cd socketChat
 ```
 2. Install Dependencies: Navigate to the folder containing the server.js and run:
 ```
