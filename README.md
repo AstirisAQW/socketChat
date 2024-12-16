@@ -1,4 +1,4 @@
-# SocketChat: Socket.IO Chat Application**
+# SocketChat: Socket.IO Chat Application
 
 ## Overview
 This project is a real-time chat application built using Node.js, Express, and Socket.IO. The application allows users to join a chat room, exchange messages in real-time, and see who is online. It features typing indicators, timestamped messages, and a user-friendly UI built with HTML, CSS, and JavaScript.
