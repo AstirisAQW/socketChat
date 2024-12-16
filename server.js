@@ -18,9 +18,7 @@ io.on('connection', (socket) => {
         console.log('a user connected');
         // Handle nickname setting
         socket.on('set nickname', (nickname) => {
-            if (!nickname) {
-                return socket.emit('error', 'Nickname cannot be empty');
-            }
+            console.log('Received nickname:', nickname, 'Type:', typeof nickname);
             users[socket.id] = nickname;
             io.emit('user activity', `${nickname} joined the chat`);
             updateUserList();
@@ -31,11 +29,18 @@ io.on('connection', (socket) => {
             if (!msg) {
                 return socket.emit('error', 'Message cannot be empty');
             }
+
+            if (msg.length > 500) {
+                return socket.emit('error', 'Message exceeds 500 characters');
+            }
+
             const nickname = users[socket.id] || 'Anonymous';
             const timestamp = Date.now();
 
             io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
             socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
+
+            console.log('a message was sent.');
         });
 
         socket.on('typing', (nickname) => {
@@ -44,7 +49,7 @@ io.on('connection', (socket) => {
 
         // Handle disconnects
         socket.on('disconnect', () => {
-            console.log('user disconnected');
+            console.log('a user disconnected');
             const nickname = users[socket.id] || 'A user';
             io.emit('user activity', `${nickname} left the chat`);
             delete users[socket.id];

@@ -20,6 +20,11 @@ window.onload = () => {
     // Handle submitting nickname
     nicknameSubmit.addEventListener('click', () => {
         username = nicknameInput.value.trim() || "Anonymous";  // Fallback to "Anonymous" if empty
+
+        if(username.length > 20){
+            return alert('Nickname must be less than 20 characters');
+        } 
+
         if (username) {
             nicknameModal.style.visibility = 'hidden';  // Hide modal
             nicknameModal.style.opacity = '0';
@@ -51,6 +56,11 @@ function initializeSocket() {
     // Handle receiving chat messages (no timestamp)
     socket.on('chat message', ({ msg, nickname, timestamp, isSelf }) => {
         try {
+
+            if(msg.length > 500){
+                return alert('Message exceeds 500 characters.');
+            }
+
             const li = document.createElement('li');
             li.classList.add(isSelf ? 'self' : 'other'); // Apply bubble-specific class to the list item
             
