@@ -26,17 +26,22 @@ io.on('connection', (socket) => {
 
         // Handle chat messages with timestamps
         socket.on('chat message', (msg) => {
-            if (!msg) {
-                return socket.emit('error', 'Message cannot be empty');
+            try{
+                if (!msg) {
+                    return socket.emit('error', 'Message cannot be empty');
+                }
+    
+                const nickname = users[socket.id] || 'Anonymous';
+                const timestamp = Date.now();
+    
+                io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
+                socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
+    
+                console.log('a message was sent.');
+
+            } catch (error) {
+                console.error('Error sending chat message:', error);
             }
-
-            const nickname = users[socket.id] || 'Anonymous';
-            const timestamp = Date.now();
-
-            io.to(socket.id).emit('chat message', { msg, nickname: 'You', timestamp, isSelf: true });
-            socket.broadcast.emit('chat message', { msg, nickname, timestamp, isSelf: false });
-
-            console.log('a message was sent.');
         });
 
         socket.on('typing', (nickname) => {
