@@ -15,6 +15,7 @@ let users = {}; // Track users by socket ID
 
 io.on('connection', (socket) => {
     try {
+        console.log('a user connected');
         // Handle nickname setting
         socket.on('set nickname', (nickname) => {
             if (!nickname) {
@@ -43,6 +44,7 @@ io.on('connection', (socket) => {
 
         // Handle disconnects
         socket.on('disconnect', () => {
+            console.log('user disconnected');
             const nickname = users[socket.id] || 'A user';
             io.emit('user activity', `${nickname} left the chat`);
             delete users[socket.id];
