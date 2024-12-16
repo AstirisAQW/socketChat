@@ -30,10 +30,6 @@ io.on('connection', (socket) => {
                 return socket.emit('error', 'Message cannot be empty');
             }
 
-            if (msg.length > 500) {
-                return socket.emit('error', 'Message exceeds 500 characters');
-            }
-
             const nickname = users[socket.id] || 'Anonymous';
             const timestamp = Date.now();
 
