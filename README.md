@@ -132,3 +132,12 @@ Handles the client-side behavior, including establishing a Socket.IO connection,
 4. Test Typing Indicator: Verify that typing indicators appear when users are typing and disappear after 3 seconds of inactivity.
 5. Test User List Updates: Check that the online user list updates properly as users join and leave.
 6. Test Disconnect: Test disconnecting a user and verify that the chat updates accordingly.
+
+## Future Improvements
+1. Private Messaging: Allow users to send direct messages.
+2. Rooms/Channels: Enable multiple chat rooms.
+3. Persistent Storage: Store chat history using a database.
+4. Enhanced UI: Improve animations and add themes.
+
+## Conclusion
+This Socket.IO chat application demonstrates real-time communication using a simple yet functional architecture. With additional features, it can serve as a foundation for more complex messaging platforms.
